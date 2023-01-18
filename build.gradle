@@ -30,7 +30,11 @@ dependencies {
 }
 
 //Default base URL value
-def baseUrl = "https://www.w3schools.com/"
+def baseUrl = "https://cloud.dwavesys.com/leap/login/"
+//Default username
+def username = "konstantin.shenderov@d-wave.com"
+//Default password
+def password = "Password!"
 //Default test suite file
 def suiteFile = "all-classes.xml"
 
@@ -38,6 +42,8 @@ test {
     outputs.upToDateWhen { false } //always discard previous run
     systemProperty "driverType", project.hasProperty("driverType") ? project.property("driverType") : "chrome" //set driver type or use default
     systemProperty "baseUrl", project.hasProperty("baseUrl") ? project.property("baseUrl") : baseUrl //set base URL or use default
+    systemProperty "username", project.hasProperty("username") ? project.property("username") : username //set username or use default
+    systemProperty "password", project.hasProperty("password") ? project.property("password") : password //set password or use default
     systemProperty "hubUrl", project.hasProperty("hubUrl") ? project.property("hubUrl") : null //set Hub URL
     systemProperty "browserstackUsername", project.hasProperty("browserstackUsername") ? project.property("browserstackUsername") : null //set Browserstack username
     systemProperty "browserstackKey", project.hasProperty("browserstackKey") ? project.property("browserstackKey") : null //set Browserstack key

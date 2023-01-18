@@ -1,12 +1,13 @@
 package me.shenderov.automation.tests;
 
+import me.shenderov.automation.test.pageobjects.HomePage;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
-import me.shenderov.automation.test.pageobjects.IndexPage;
+import me.shenderov.automation.test.pageobjects.LoginPage;
 import me.shenderov.automation.tools.DriverManager;
 import me.shenderov.automation.tools.TestListener;
 
@@ -26,6 +27,16 @@ public abstract class BaseTest {
     private static final String baseUrl = System.getProperty("baseUrl");
 
     /**
+     * Username from system properties. Default value can be changed in build.gradle
+     */
+    protected static String username = System.getProperty("username");
+
+    /**
+     * Password from system properties. Default value can be changed in build.gradle
+     */
+    protected static String password = System.getProperty("password");
+
+    /**
      * Driver type. Values: chrome, phantomjs, firefox, opera, ie, edge, browserstack, hub
      */
     protected static String driverType = System.getProperty("driverType");
@@ -38,7 +49,7 @@ public abstract class BaseTest {
     /**
      * Index Page object, this object will be initiated by default when a browser opened.
      */
-    protected static IndexPage indexPage;
+    protected static LoginPage loginPage;
 
     /**
      * This method runs before every test class. It will initialize web driver and navigate to the index page.
@@ -51,7 +62,7 @@ public abstract class BaseTest {
             driver = driverManager.getDriver(); // Initialize web driver using driver manager
             if(driver != null) { // if the web driver initialized, set it to ITestContext and initialize test
                 context.setAttribute("webDriver", driver);
-                indexPage = initializeTest();
+                loginPage = initializeTest();
             }
         } catch (Exception e) { // if something went wrong, cleanup and throw exception
             e.printStackTrace();
@@ -76,11 +87,17 @@ public abstract class BaseTest {
     /**
      * This method extends the setup method to set up the browser parameters and get open the base URL.
      */
-    private IndexPage initializeTest() {
+    private LoginPage initializeTest() {
         Dimension dimension = new Dimension(1920, 1080);
         driver.manage().window().setSize(dimension);
         driver.get(baseUrl);
-        indexPage = new IndexPage(driver);
-        return indexPage;
+        loginPage = new LoginPage(driver);
+        return loginPage;
+    }
+
+    protected HomePage login() {
+        loginPage.setUsername(username);
+        loginPage.setPassword(password);
+        return loginPage.clickOnLoginButton();
     }
 }
